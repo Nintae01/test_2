@@ -13,6 +13,26 @@
   <link rel="stylesheet" href="assets/css/redteam.css"/>
 </head>
 <body>
+<div class="bg">
+  <div class="paper" aria-hidden="true"></div>
+  <div class="ornate ornate--top" aria-hidden="true"></div>
+  <div class="ornate ornate--bottom" aria-hidden="true"></div>
+  <div class="circuit" aria-hidden="true"></div>
+  <div class="scene scene--outer" aria-hidden="true">
+    <canvas id="stars"></canvas>
+    <img class="layer layer--moon" data-depth="0.04" src="assets/img/moon.svg" alt="" />
+    <img class="layer grounded layer--castle" data-depth="0.22" src="assets/img/castle-ruin.svg" alt="" />
+    <img class="layer grounded layer--hills" data-depth="0.14" src="assets/img/hills-near.svg" alt="" />
+    <div class="layer grounded ground-shadow" data-depth="0.14"></div>
+    <img class="layer grounded layer--causeway" data-depth="0.25" src="assets/img/causeway.svg" alt="" />
+    <img class="layer rise layer--trees-left" data-depth="0.22" data-rise="360" src="assets/img/trees-left.svg" alt="" />
+    <img class="layer rise layer--trees-right" data-depth="0.23" data-rise="360" src="assets/img/trees-right.svg" alt="" />
+    <canvas id="fireflies"></canvas>
+    <div class="layer fog fog--a" data-depth="0.18"></div>
+    <div class="layer fog fog--b" data-depth="0.20"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+</div>
 <header class="masthead">
   <div class="container">
     <div class="brand">
@@ -91,5 +111,6 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="assets/js/effects/rainlightning.js"></script>
 </body>
 </html>
