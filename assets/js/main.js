@@ -198,6 +198,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
     el.classList.add(pick);
   });
 })();
+
 /* gate-entry scene */
 const finale=document.querySelector('#signal');
 if(finale){
@@ -205,4 +206,10 @@ if(finale){
     document.body.classList.toggle('is-finale',e.isIntersecting);
   },{threshold:.6});
   io.observe(finale);
+  // Fallback: scroll listener for is-finale
+  window.addEventListener('scroll',()=>{
+    const st=window.scrollY||document.documentElement.scrollTop;
+    const limit=document.getElementById('signal').offsetTop;
+    document.body.classList.toggle('is-finale',st+window.innerHeight*.6>limit);
+  });
 }
