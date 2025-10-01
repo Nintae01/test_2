@@ -224,17 +224,13 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
   });
 })();
 
-/* gate-entry scene */
-const finale=document.querySelector('#signal');
+
+/* gate-entry finale – scroll fallback */
+const finale=document.getElementById('signal');
 if(finale){
-  const io=new IntersectionObserver(([e])=>{
-    document.body.classList.toggle('is-finale',e.isIntersecting);
-  },{threshold:.6});
-  io.observe(finale);
-  // Fallback: scroll listener for is-finale
   window.addEventListener('scroll',()=>{
     const st=window.scrollY||document.documentElement.scrollTop;
-    const limit=document.getElementById('signal').offsetTop;
+    const limit=finale.offsetTop;
     document.body.classList.toggle('is-finale',st+window.innerHeight*.6>limit);
-  });
+  },{passive:true});
 }
