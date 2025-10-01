@@ -1,9 +1,9 @@
 /* hack-transition on hover */
-const redBtn=document.querySelector('a[href="redteam.html"]');
-const overlay=document.getElementById('hackOverlay');
-const term=overlay.querySelector('.terminal');
-if(redBtn&&overlay){
-  const lines=[
+const redBtn = document.querySelector('a[href="redteam.html"]');
+const overlay = document.getElementById('hackOverlay');
+const term = overlay ? overlay.querySelector('.terminal') : null;
+if (redBtn && overlay && term) {
+  const lines = [
     "$ nmap -sC -sV castle.local",
     "22/tcp  open  ssh",
     "80/tcp  open  http",
@@ -14,44 +14,25 @@ if(redBtn&&overlay){
     "Server username: NT AUTHORITY\\SYSTEM",
     "[*] Dropping you into the ruins…"
   ];
-  let i=0;
-  redBtn.addEventListener('mouseenter',()=>{
+  let i = 0;
+  redBtn.addEventListener('mouseenter', () => {
     overlay.classList.add('active');
-    term.textContent=''; i=0;
-    const type=()=>{
-      if(i<lines.length){term.textContent+=lines[i]+'\n'; i++; setTimeout(type,400);}
-      else{setTimeout(()=>{overlay.classList.remove('active'); window.location='redteam.html';},1200);}
+    term.textContent = '';
+    i = 0;
+    const type = () => {
+      if (i < lines.length) {
+        term.textContent += lines[i] + '\n';
+        i++;
+        setTimeout(type, 400);
+      } else {
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          window.location = 'redteam.html';
+        }, 1200);
+      }
     };
     type();
-  });
-}
-/* hack-transition on hover */
-const redBtn=document.querySelector('a[href="redteam.html"]');
-const overlay=document.getElementById('hackOverlay');
-const term=overlay ? overlay.querySelector('.terminal') : null;
-if(redBtn&&overlay&&term){
-  const lines=[
-    "$ nmap -sC -sV castle.local",
-    "22/tcp  open  ssh",
-    "80/tcp  open  http",
-    "443/tcp open  https",
-    "msf6 > exploit(multi/handler) > run",
-    "[*] Meterpreter session 1 opened",
-    "meterpreter > getuid",
-    "Server username: NT AUTHORITY\\SYSTEM",
-    "[*] Dropping you into the ruins…"
-  ];
-  let i=0;
-  redBtn.addEventListener('mouseenter',()=>{
-    overlay.classList.add('active');
-    term.textContent='';
-    i=0;
-    const type=()=>{
-      if(i<lines.length){term.textContent+=lines[i]+"\n"; i++; setTimeout(type,400);}
-      else{setTimeout(()=>{overlay.classList.remove('active'); window.location='redteam.html';},1200);}
-    };
-    type();
-  },{once:false});
+  }, { once: false });
 }
 // Glitch and switch to Red Team mode on long hover
 (function redTeamHoverGlitch(){
