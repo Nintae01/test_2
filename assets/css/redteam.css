@@ -1,0 +1,16 @@
+/* RED-THEME OVERRIDE – loads AFTER base stylesheet */
+:root{
+  --bg:#1a0a0a;
+  --primary:#ef4444;        /* crimson accent */
+  --gold:#f87171;           /* rose-gold */
+  --text:#ffe4e4;
+  --muted:#fecaca;
+  --border:rgba(255,255,255,.08);
+}
+/* ruined castle */
+.scene--outer .layer--castle{content:url("/static/img/castle-ruin.svg");filter:brightness(.4) contrast(1.2) saturate(0) drop-shadow(0 12px 24px rgba(220,38,38,.25))}
+.scene--outer .layer--moon{filter:sepia(1) hue-rotate(-30deg) saturate(2)}
+/* red fireflies */
+#fireflies{filter:hue-rotate(140deg) saturate(1.8)}
+/* blood progress */
+.progress-top .bar{background:linear-gradient(90deg,var(--primary),var(--gold))}
