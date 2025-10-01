@@ -1,3 +1,51 @@
+/* =====  HACK-TRANSITION  ===== */
+@keyframes glitch{
+  0%{transform:translate(0);}
+  20%{transform:translate(-2px,2px);}
+  40%{transform:translate(-2px,-2px);}
+  60%{transform:translate(2px,2px);}
+  80%{transform:translate(2px,-2px);}
+  100%{transform:translate(0);}
+}
+@keyframes scanline{
+  0%{background-position:0 0;}
+  100%{background-position:0 100%;}
+}
+.hack-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#0b0f16;
+  color:#22c55e;
+  font-family:'Share Tech Mono',monospace;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+}
+.hack-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+.hack-overlay .terminal{
+  width:62ch;
+  border-right:2px solid #22c55e;
+  white-space:nowrap;
+  overflow:hidden;
+  animation:type 3s steps(62,end),blink .75s step-end infinite;
+}
+@keyframes type{from{width:0}}
+@keyframes blink{50%{border-color:transparent}}
+.hack-overlay .glitch-img{
+  position:absolute;
+  inset:0;
+  background:url("/assets/img/castle-close.svg") center/cover;
+  filter:saturate(0) brightness(.4) contrast(1.2);
+  animation:glitch .15s 6;
+}
 /* Glitch effect for body */
 body.glitch {
   animation: glitchy 0.15s steps(2, end) infinite;
