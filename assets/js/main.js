@@ -198,3 +198,11 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
     el.classList.add(pick);
   });
 })();
+/* gate-entry scene */
+const finale=document.querySelector('#signal');
+if(finale){
+  const io=new IntersectionObserver(([e])=>{
+    document.body.classList.toggle('is-finale',e.isIntersecting);
+  },{threshold:.6});
+  io.observe(finale);
+}
