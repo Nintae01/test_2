@@ -106,7 +106,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
   let dpr=1, w=0, h=0, bugs=[];
   function resize(){ dpr = window.devicePixelRatio||1; w = c.clientWidth; h = c.clientHeight; c.width = w*dpr; c.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); build(); }
   function build(){ const count = Math.max(14, Math.round(Math.sqrt(w*h)/40)); bugs = new Array(count).fill(0).map(()=>({ x: Math.random()*w, y: Math.random()*h*0.6 + h*0.2, a: Math.random()*Math.PI*2, v: 0.3 + Math.random()*0.6, r: 1.2 + Math.random()*1.6, t: Math.random()*6 })); }
-  function step(){ ctx.clearRect(0,0,w,h); bugs.forEach(b=>{ b.a += (Math.random()-0.5)*0.2; b.x += Math.cos(b.a)*b.v; b.y += Math.sin(b.a)*b.v*0.6; b.t += 0.03; const glow = 0.4 + 0.6*(0.5+0.5*Math.sin(b.t)); ctx.shadowBlur = 8 + 22*glow; ctx.shadowColor = `rgba(230,208,156,${0.5+0.5*glow})`; ctx.fillStyle = `rgba(230,208,156,${0.6+0.4*glow})`; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); if (b.x<-10) b.x=w+10; if (b.x>w+10) b.x=-10; if (b.y<0) b.y=h*0.9; if (b.y>h) b.y=h*0.2; }); requestAnimationFrame(step); }
+  function step(){ ctx.clearRect(0,0,w,h); bugs.forEach(b=>{ b.a += (Math.random()-0.5)*0.2; b.x += Math.cos(b.a)*b.v; b.y += Math.sin(b.a)*b.v*0.6; b.t += 0.03; const glow = 0.4 + 0.6*(0.5+0.5*Math.sin(b.t)); ctx.shadowBlur = 8 + 22*glow; ctx.shadowColor = `rgba(239,68,68,${0.5+0.5*glow})`; ctx.fillStyle = `rgba(248,113,113,${0.6+0.4*glow})`; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); if (b.x<-10) b.x=w+10; if (b.x>w+10) b.x=-10; if (b.y<0) b.y=h*0.9; if (b.y>h) b.y=h*0.2; }); requestAnimationFrame(step); }
   resize(); window.addEventListener('resize', resize); step();
 })();
 
