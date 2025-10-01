@@ -9,8 +9,8 @@
 }
 
 
+
 /* 1.  swap SVG sources  */
-.layer--castle        { content:url("/assets/img/castle-ruin.svg"); }
 .layer--moon          { content:url("/assets/img/moon-blood.svg"); }
 .layer--hills         { content:url("/assets/img/hills-scorched.svg"); }
 
