@@ -1,3 +1,13 @@
+.hack-overlay{
+  background:#0b0f16;
+  color:#60a5fa;                   /* soft blue */
+  font-family:'Share Tech Mono',monospace;
+}
+.hack-overlay .terminal{
+  border-right:2px solid #60a5fa;
+  animation:type 3s steps(62,end),blink .75s step-end infinite;
+}
+@keyframes blink{50%{border-color:transparent}}
 /* =====  HACK-TRANSITION  ===== */
 @keyframes glitch{
   0%{transform:translate(0);}
