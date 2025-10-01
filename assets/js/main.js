@@ -1,3 +1,28 @@
+// Glitch and switch to Red Team mode on long hover
+(function redTeamHoverGlitch(){
+  // Target Red Team button (danger or primary to redteam.html)
+  const btn = document.querySelector('.btn.danger, .btn.primary[href="redteam.html"]');
+  if (!btn) return;
+  let hoverTimer = null, glitching = false;
+  btn.addEventListener('mouseenter', () => {
+    hoverTimer = setTimeout(() => {
+      glitching = true;
+      document.body.classList.add('glitch');
+      // Glitch effect: shake + invert for 600ms
+      setTimeout(() => {
+        document.body.classList.remove('glitch');
+        window.location.href = 'redteam.html';
+      }, 600);
+    }, 1500);
+  });
+  btn.addEventListener('mouseleave', () => {
+    if (hoverTimer) clearTimeout(hoverTimer);
+    if (glitching) {
+      document.body.classList.remove('glitch');
+      glitching = false;
+    }
+  });
+})();
 // Fantasy interactive variant JS
 const $ = (s, c=document) => c.querySelector(s);
 const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));

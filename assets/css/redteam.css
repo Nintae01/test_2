@@ -1,3 +1,16 @@
+/* Glitch effect for body */
+body.glitch {
+  animation: glitchy 0.15s steps(2, end) infinite;
+  filter: invert(1) hue-rotate(-30deg) contrast(2) brightness(1.2) !important;
+}
+@keyframes glitchy {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-2px,2px); }
+  40% { transform: translate(2px,-2px); }
+  60% { transform: translate(-2px,2px); }
+  80% { transform: translate(2px,-2px); }
+  100% { transform: translate(0,0); }
+}
 /* RED-THEME OVERRIDE – loads AFTER base stylesheet */
 :root{
   --bg:#1a0a0a;
