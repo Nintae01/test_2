@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Enzo Dupuy – Red Team</title>
+  <meta name="description" content="Offensive security chronicles of Enzo Dupuy"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/redteam.css"/>
+</head>
+<body>
+<header class="masthead">
+  <div class="container">
+    <div class="brand">
+      <img class="crest" src="assets/img/crest.svg" alt="Crest"/>
+      <div class="wordmark">
+        <span class="name">Enzo Dupuy</span>
+        <span class="tag mono">Red Team Chronicles</span>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html">Defender</a></li>
+        <li><a class="btn primary" href="redteam.html">Red Team</a></li>
+        <li><a class="btn ghost" href="assets/cv_redteam.pdf" target="_blank">PDF résumé</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="prologue" class="chapter hero">
+    <div class="container">
+      <div class="scroll panel reveal">
+        <h1 class="title">ENZO DUPUY</h1>
+        <p class="subtitle mono">Red-team operator · Chain-breaker</p>
+        <p class="lede">I break castles so defenders can rebuild stronger.<br>
+          These are the chronicles of the offensive side.</p>
+        <div class="cta">
+          <a class="btn primary" href="#arsenal"><i class="fa-solid fa-skull-crossbones"></i> See arsenal</a>
+          <a class="btn ghost" href="#signal"><i class="fa-solid fa-feather"></i> Send a raven</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="arsenal" class="chapter">
+    <div class="container">
+      <div class="scroll panel reveal">
+        <h2 class="chapter-title">Arsenal · Offensive Tools</h2>
+        <div class="armory">
+          <div class="weapon weapon--ribbon"><i class="fa-solid fa-terminal"></i><strong>Linux</strong><span>Pivot & Post-exploitation</span></div>
+          <div class="weapon weapon--diagonal"><i class="fa-brands fa-python"></i><strong>Python</strong><span>Exploit dev & Automation</span></div>
+          <div class="weapon weapon--notch"><i class="fa-solid fa-bolt"></i><strong>Burp</strong><span>Web App Pentest</span></div>
+          <div class="weapon weapon--ribbon"><i class="fa-solid fa-network-wired"></i><strong>Nmap</strong><span>Recon & Enumeration</span></div>
+          <div class="weapon weapon--diagonal"><i class="fa-solid fa-water"></i><strong>Metasploit</strong><span>Payloads & Chains</span></div>
+          <div class="weapon weapon--notch"><i class="fa-solid fa-bug"></i><strong>Custom C2</strong><span>Implant & Dropper</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="signal" class="chapter">
+    <div class="container">
+      <div class="scroll panel reveal">
+        <h2 class="chapter-title">Finale · Contact</h2>
+        <p>Send a raven or encrypted signal.</p>
+        <ul class="contacts">
+          <li><button class="copy" data-copy="enzo.dupuy@ecole2600.com"><i class="fa-solid fa-envelope"></i> enzo.dupuy@ecole2600.com</button></li>
+          <li><a class="link" href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a></li>
+          <li><a class="link" href="https://github.com/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a></li>
+        </ul>
+        <form id="contactForm" class="contact-form" onsubmit="return false;">
+          <label><span>Name</span><input type="text" name="name" placeholder="Your name" required /></label>
+          <label><span>Email</span><input type="email" name="email" placeholder="you@realm.com" required /></label>
+          <label><span>Message</span><textarea name="message" rows="5" placeholder="Your message..." required></textarea></label>
+          <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <p class="status mono" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer mono">
+  <div class="container">© <span id="year"></span> Enzo Dupuy · Red Team</div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
