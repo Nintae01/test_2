@@ -10,9 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/redteam.css" />
-  <link rel="stylesheet" href="assets/css/style.css">  <!-- defender styles first -->
-  <link rel="stylesheet" href="assets/css/redteam.css"> <!-- overlay styles second -->
 
 </head>
 <body>
@@ -35,13 +32,19 @@
       <div class="layer fog fog--a" data-depth="0.18"></div>
       <div class="layer fog fog--b" data-depth="0.20"></div>
     </div>
-    <!-- Inner courtyard scene (revealed when entering Arsenal) -->
+    <!-- Inner courtyard scene (revealed when entering Experience) -->
     <div class="scene scene--inner" aria-hidden="true">
       <canvas id="fireflies-inner"></canvas>
       <img class="layer layer--towers" data-depth="0.08" src="assets/img/towers.svg" alt="" />
       <img class="layer grounded layer--courtyard" data-depth="0.20" src="assets/img/courtyard.svg" alt="" />
       <div class="layer grounded layer--gate-aura" data-depth="0.20" aria-hidden="true"></div>
       <img class="layer grounded layer--nearhouses" data-depth="0.30" src="assets/img/nearhouses.svg" alt="" />
+    </div>
+    <!-- Final throne room scene (revealed at Contact) -->
+    <div class="scene scene--final" aria-hidden="true">
+      <canvas id="fireflies-final"></canvas>
+      <div class="layer layer--throne-glow" aria-hidden="true"></div>
+      <div class="layer layer--final-atmosphere" aria-hidden="true"></div>
     </div>
     <div class="vignette" aria-hidden="true"></div>
   </div>
@@ -401,10 +404,267 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
-<!-- hack-transition overlay -->
-<div id="hackOverlay" class="hack-overlay" aria-hidden="true">
-  <div class="terminal" aria-live="polite"></div>
-  <div class="glitch-img" aria-hidden="true"></div>
-</div>
+
+<!-- Enhanced Hacking Transition Overlay -->
+<div id="glitchOverlay" class="glitch-overlay" aria-hidden="true"></div>
+
+<script>
+  // Enhanced hacking transition system matching site_1_kimi approach
+  class HackingTransition {
+    constructor() {
+      this.overlay = document.getElementById('glitchOverlay');
+      this.init();
+    }
+
+    init() {
+      // Add event listeners for red team mode button
+      const redTeamBtn = document.querySelector('.btn.danger[href="redteam.html"]');
+      if (redTeamBtn) {
+        redTeamBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.triggerBreachTransition();
+        });
+      }
+    }
+
+    triggerBreachTransition() {
+      // Create glitch overlay matching site_1_kimi structure
+      const glitchOverlay = document.createElement('div');
+      glitchOverlay.className = 'glitch-overlay';
+      glitchOverlay.innerHTML = `
+        <div class="terminal-interface">
+          <div class="terminal-header">
+            <span class="terminal-title">SYSTEM_BREACH.exe</span>
+            <div class="terminal-controls">
+              <span class="terminal-btn close"></span>
+              <span class="terminal-btn minimize"></span>
+              <span class="terminal-btn maximize"></span>
+            </div>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-output" id="breach-terminal"></div>
+            <div class="terminal-input">
+              <span class="terminal-prompt">hacker@target-system:~$</span>
+              <input type="text" class="terminal-command" readonly>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(glitchOverlay);
+
+      // Show the overlay
+      glitchOverlay.style.display = 'flex';
+
+      // Execute breach commands using site_1_kimi method
+      this.executeBreachCommands();
+
+      // Add glitch effects like site_1_kimi
+      this.addBreachGlitchEffects(glitchOverlay);
+
+      // Navigate after transition
+      setTimeout(() => {
+        window.location.href = 'redteam.html';
+      }, 3000);
+    }
+
+    executeBreachCommands() {
+      const terminal = document.getElementById('breach-terminal');
+      if (!terminal) return;
+
+      const commands = [
+        'Initializing system breach protocol...',
+        'Scanning for vulnerabilities...',
+        'Bypassing firewall defenses...',
+        'Escalating privileges...',
+        'Establishing command & control...',
+        'System compromised. Red team mode activated.'
+      ];
+
+      let commandIndex = 0;
+      const typeCommand = () => {
+        if (commandIndex < commands.length) {
+          this.typeTerminalCommand(terminal, commands[commandIndex], () => {
+            setTimeout(() => {
+              commandIndex++;
+              typeCommand();
+            }, 500);
+          });
+        }
+      };
+
+      typeCommand();
+    }
+
+    typeTerminalCommand(terminal, text, callback) {
+      let charIndex = 0;
+      const typeChar = () => {
+        if (charIndex < text.length) {
+          terminal.innerHTML += text.charAt(charIndex);
+          charIndex++;
+          setTimeout(typeChar, 30); // Faster typing for better UX
+        } else {
+          terminal.innerHTML += '<br>';
+          if (callback) callback();
+        }
+      };
+      typeChar();
+    }
+
+    addBreachGlitchEffects(glitchOverlay) {
+      // Add screen glitch animation
+      glitchOverlay.style.animation = 'screenGlitch 0.1s infinite';
+
+      // Add pixel displacement
+      setTimeout(() => {
+        glitchOverlay.style.filter = 'hue-rotate(0deg) saturate(200%) contrast(150%)';
+      }, 1000);
+
+      // Add static noise
+      setTimeout(() => {
+        const staticNoise = document.createElement('div');
+        staticNoise.className = 'static-noise';
+        glitchOverlay.appendChild(staticNoise);
+      }, 2000);
+    }
+  }
+
+  // Initialize hacking transition when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new HackingTransition();
+  });
+</script>
+
+<style>
+  /* Enhanced glitch overlay styles matching site_1_kimi */
+  .glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(2px);
+  }
+
+  .terminal-interface {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .terminal-header {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.5);
+  }
+
+  .terminal-title {
+    color: #ff4444;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  .terminal-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .terminal-btn.close { background: #ff5f57; }
+  .terminal-btn.minimize { background: #ffbd2e; }
+  .terminal-btn.maximize { background: #28ca42; }
+
+  .terminal-body {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    min-height: 200px;
+  }
+
+  .terminal-output {
+    color: #00ff00;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+  }
+
+  .terminal-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt {
+    color: #00ff00;
+    font-size: 0.9rem;
+  }
+
+  .terminal-command {
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    flex: 1;
+    outline: none;
+  }
+
+  /* Enhanced glitch animation effects for breach */
+  @keyframes screenGlitch {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-2px) translateY(2px); }
+    40% { transform: translateX(-2px) translateY(-2px); }
+    60% { transform: translateX(2px) translateY(2px); }
+    80% { transform: translateX(2px) translateY(-2px); }
+  }
+
+  .static-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.05) 2px,
+      rgba(255, 255, 255, 0.05) 4px
+    );
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  /* Breach-specific styling */
+  .glitch-overlay .terminal-title {
+    color: #ff4444;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+  }
+
+  .glitch-overlay .terminal-prompt {
+    color: #ff6666;
+  }
+
+  .glitch-overlay .terminal-command {
+    color: #ff6666;
+  }
+</style>
 </body>
 </html>

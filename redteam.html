@@ -62,7 +62,9 @@
           These are the chronicles of the offensive side.</p>
         <div class="cta">
           <a class="btn primary" href="#arsenal"><i class="fa-solid fa-skull-crossbones"></i> See arsenal</a>
+          <a class="btn ghost" href="#terminal"><i class="fa-solid fa-terminal"></i> Command Center</a>
           <a class="btn ghost" href="#signal"><i class="fa-solid fa-feather"></i> Send a raven</a>
+          <a class="btn secondary" href="index.html" onclick="triggerDefenderTransition(event)"><i class="fa-solid fa-shield-halved"></i> Return to Defender Mode</a>
         </div>
       </div>
     </div>
@@ -79,6 +81,32 @@
           <div class="weapon weapon--ribbon"><i class="fa-solid fa-network-wired"></i><strong>Nmap</strong><span>Recon & Enumeration</span></div>
           <div class="weapon weapon--diagonal"><i class="fa-solid fa-water"></i><strong>Metasploit</strong><span>Payloads & Chains</span></div>
           <div class="weapon weapon--notch"><i class="fa-solid fa-bug"></i><strong>Custom C2</strong><span>Implant & Dropper</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="terminal" class="chapter">
+    <div class="container">
+      <div class="scroll panel reveal">
+        <h2 class="chapter-title"><i class="fa-solid fa-terminal"></i> Command Center</h2>
+        <p>Interactive terminal for red team operations. Type 'help' for available commands.</p>
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <span class="terminal-title">redteam@cyber-portfolio:~$</span>
+            <div class="terminal-controls">
+              <span class="terminal-btn close"></span>
+              <span class="terminal-btn minimize"></span>
+              <span class="terminal-btn maximize"></span>
+            </div>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-output" id="terminal-output"></div>
+            <div class="terminal-input">
+              <span class="terminal-prompt">redteam@cyber-portfolio:~$</span>
+              <input type="text" class="terminal-command" id="terminal-input" placeholder="Type a command...">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -112,5 +140,435 @@
 
 <script src="assets/js/main.js"></script>
 <script src="assets/js/effects/rainlightning.js"></script>
+
+<!-- Terminal Interface -->
+<script>
+  class RedTeamTerminal {
+    constructor() {
+      this.output = document.getElementById('terminal-output');
+      this.input = document.getElementById('terminal-input');
+      this.commandHistory = [];
+      this.historyIndex = -1;
+      this.init();
+    }
+
+    init() {
+      if (!this.output || !this.input) return;
+
+      this.input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          this.executeCommand(this.input.value.trim());
+          this.input.value = '';
+        } else if (e.key === 'ArrowUp') {
+          this.navigateHistory('up');
+        } else if (e.key === 'ArrowDown') {
+          this.navigateHistory('down');
+        }
+      });
+
+      this.input.focus();
+      this.printWelcome();
+    }
+
+    printWelcome() {
+      this.print('Red Team Terminal v1.0.0', 'system');
+      this.print('Type "help" for available commands.', 'info');
+      this.print('', '');
+    }
+
+    executeCommand(command) {
+      if (!command) return;
+
+      this.commandHistory.push(command);
+      this.historyIndex = this.commandHistory.length;
+
+      this.print(`$ ${command}`, 'command');
+
+      const response = this.processCommand(command.toLowerCase());
+      this.print(response, 'response');
+    }
+
+    processCommand(command) {
+      const commands = {
+        'help': this.getHelp(),
+        'ls': 'Available sections: arsenal, terminal, signal',
+        'cd': 'Usage: cd [section] - Navigate to section',
+        'scan': 'Scanning for vulnerabilities... Found 7 potential entry points.',
+        'nmap': 'Starting Nmap scan...\nHost is up (0.00041s latency).\nPORT   STATE SERVICE\n22/tcp open  ssh\n80/tcp open  http\n443/tcp open https',
+        'exploit': 'Select target: web_app, network, social',
+        'whoami': 'redteam operator - Enzo Dupuy',
+        'pwd': '/home/redteam/cyber-portfolio',
+        'clear': this.clear(),
+        'history': this.commandHistory.join('\n'),
+        'back': 'Use "defender" command to return to defender mode',
+        'defender': 'Initiating defender mode transition...',
+        'home': 'Use "defender" command to return to defender mode'
+      };
+
+      return commands[command] || `Command not found: ${command}. Type "help" for available commands.`;
+    }
+
+    getHelp() {
+      return `Available Commands:
+  help      - Show this help message
+  ls        - List available sections
+  cd        - Navigate to section (cd arsenal, cd terminal, cd signal)
+  scan      - Scan for vulnerabilities
+  nmap      - Network scanning simulation
+  exploit   - Exploit development tools
+  whoami    - Show current user
+  pwd       - Show current directory
+  clear     - Clear terminal
+  history   - Show command history
+  defender  - Return to defender mode
+  back      - Return to previous section`;
+    }
+
+    print(text, className) {
+      if (className === 'clear') {
+        this.output.innerHTML = '';
+        return;
+      }
+
+      const line = document.createElement('div');
+      line.className = `terminal-line ${className}`;
+      line.textContent = text;
+      this.output.appendChild(line);
+      this.output.scrollTop = this.output.scrollHeight;
+    }
+
+    clear() {
+      this.output.innerHTML = '';
+      return '';
+    }
+
+    navigateHistory(direction) {
+      if (this.commandHistory.length === 0) return;
+
+      if (direction === 'up' && this.historyIndex > 0) {
+        this.historyIndex--;
+      } else if (direction === 'down' && this.historyIndex < this.commandHistory.length - 1) {
+        this.historyIndex++;
+      }
+
+      this.input.value = this.commandHistory[this.historyIndex] || '';
+    }
+  }
+
+  // Initialize terminal when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new RedTeamTerminal();
+  });
+
+  // Enhanced defender transition function using site_1_kimi approach
+  function triggerDefenderTransition(event) {
+    event.preventDefault();
+
+    // Create glitch overlay matching site_1_kimi structure
+    const glitchOverlay = document.createElement('div');
+    glitchOverlay.className = 'glitch-overlay';
+    glitchOverlay.innerHTML = `
+      <div class="terminal-interface">
+        <div class="terminal-header">
+          <span class="terminal-title">SYSTEM_TRANSFORMATION.exe</span>
+          <div class="terminal-controls">
+            <span class="terminal-btn close"></span>
+            <span class="terminal-btn minimize"></span>
+            <span class="terminal-btn maximize"></span>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-output" id="transition-terminal"></div>
+          <div class="terminal-input">
+            <span class="terminal-prompt">user@cyber-portfolio:~$</span>
+            <input type="text" class="terminal-command" readonly>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(glitchOverlay);
+
+    // Execute defender transition commands using site_1_kimi method
+    executeDefenderTransitionCommands();
+
+    // Add glitch effects like site_1_kimi
+    addDefenderGlitchEffects(glitchOverlay);
+
+    // Navigate after transition
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 3000);
+  }
+
+  function executeDefenderTransitionCommands() {
+    const terminal = document.getElementById('transition-terminal');
+    if (!terminal) return;
+
+    const commands = [
+      'Restoring system integrity...',
+      'Rebuilding firewall rules...',
+      'Patching vulnerabilities...',
+      'Restoring defensive protocols...',
+      'System secured. Defender mode restored.'
+    ];
+
+    let commandIndex = 0;
+    const typeCommand = () => {
+      if (commandIndex < commands.length) {
+        typeTerminalCommand(terminal, commands[commandIndex], () => {
+          setTimeout(() => {
+            commandIndex++;
+            typeCommand();
+          }, 500);
+        });
+      }
+    };
+
+    typeCommand();
+  }
+
+  function typeTerminalCommand(terminal, text, callback) {
+    let charIndex = 0;
+    const typeChar = () => {
+      if (charIndex < text.length) {
+        terminal.innerHTML += text.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeChar, 30); // Faster typing for better UX
+      } else {
+        terminal.innerHTML += '<br>';
+        if (callback) callback();
+      }
+    };
+    typeChar();
+  }
+
+  function addDefenderGlitchEffects(glitchOverlay) {
+    // Add screen glitch animation
+    glitchOverlay.style.animation = 'screenGlitch 0.1s infinite';
+
+    // Add pixel displacement
+    setTimeout(() => {
+      glitchOverlay.style.filter = 'hue-rotate(90deg) saturate(150%)';
+    }, 1000);
+
+    // Add static noise
+    setTimeout(() => {
+      const staticNoise = document.createElement('div');
+      staticNoise.className = 'static-noise';
+      glitchOverlay.appendChild(staticNoise);
+    }, 2000);
+  }
+</script>
+
+<style>
+  /* Terminal styles */
+  .terminal-container {
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 2rem 0;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .terminal-header {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.5);
+  }
+
+  .terminal-title {
+    color: #00ff00;
+    font-size: 0.9rem;
+  }
+
+  .terminal-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .terminal-btn.close { background: #ff5f57; }
+  .terminal-btn.minimize { background: #ffbd2e; }
+  .terminal-btn.maximize { background: #28ca42; }
+
+  .terminal-body {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    min-height: 300px;
+  }
+
+  .terminal-output {
+    color: #00ff00;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .terminal-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt {
+    color: #00ff00;
+    font-size: 0.9rem;
+  }
+
+  .terminal-command {
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    flex: 1;
+    outline: none;
+  }
+
+  .terminal-line.command {
+    color: #ffffff;
+  }
+
+  .terminal-line.response {
+    color: #00ff00;
+    margin-left: 1rem;
+  }
+
+  .terminal-line.system {
+    color: #ffaa00;
+  }
+
+  .terminal-line.info {
+    color: #0088ff;
+  }
+
+  /* Glitch overlay styles matching site_1_kimi */
+  .glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(2px);
+  }
+
+  .terminal-interface {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .terminal-header {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.5);
+  }
+
+  .terminal-title {
+    color: #00ff00;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  .terminal-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .terminal-btn.close { background: #ff5f57; }
+  .terminal-btn.minimize { background: #ffbd2e; }
+  .terminal-btn.maximize { background: #28ca42; }
+
+  .terminal-body {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    min-height: 200px;
+  }
+
+  .terminal-output {
+    color: #00ff00;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+  }
+
+  .terminal-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt {
+    color: #00ff00;
+    font-size: 0.9rem;
+  }
+
+  .terminal-command {
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    flex: 1;
+    outline: none;
+  }
+
+  /* Glitch animation effects */
+  @keyframes screenGlitch {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-2px) translateY(2px); }
+    40% { transform: translateX(-2px) translateY(-2px); }
+    60% { transform: translateX(2px) translateY(2px); }
+    80% { transform: translateX(2px) translateY(-2px); }
+  }
+
+  .static-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 2px,
+      rgba(255, 255, 255, 0.03) 4px
+    );
+    pointer-events: none;
+    opacity: 0.3;
+  }
+</style>
 </body>
 </html>
