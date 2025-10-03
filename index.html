@@ -22,10 +22,10 @@
     <div class="scene scene--outer" aria-hidden="true">
       <canvas id="stars"></canvas>
       <img class="layer layer--moon" data-depth="0.04" src="assets/img/moon.svg" alt="" />
-      <img class="layer grounded layer--castle" data-depth="0.22" src="assets/img/castle-close.svg" alt="" />
-      <img class="layer grounded layer--hills" data-depth="0.14" src="assets/img/hills-near.svg" alt="" />
-      <div class="layer grounded ground-shadow" data-depth="0.14"></div>
-      <img class="layer grounded layer--causeway" data-depth="0.25" src="assets/img/causeway.svg" alt="" />
+      <img class="layer rise layer--castle" data-depth="0.12" data-rise="200" src="assets/img/castle-close.svg" alt="" />
+      <img class="layer rise layer--hills" data-depth="0.08" data-rise="150" src="assets/img/hills-near.svg" alt="" />
+      <div class="layer rise ground-shadow" data-depth="0.08" data-rise="150"></div>
+      <img class="layer rise layer--causeway" data-depth="0.14" data-rise="180" src="assets/img/causeway.svg" alt="" />
       <img class="layer rise layer--trees-left" data-depth="0.22" data-rise="360" src="assets/img/trees-left.svg" alt="" />
       <img class="layer rise layer--trees-right" data-depth="0.23" data-rise="360" src="assets/img/trees-right.svg" alt="" />
       <canvas id="fireflies"></canvas>
@@ -43,7 +43,26 @@
     <!-- Final throne room scene (revealed at Contact) -->
     <div class="scene scene--final" aria-hidden="true">
       <canvas id="fireflies-final"></canvas>
+      <div class="layer grounded layer--throne-backdrop" aria-hidden="true"></div>
+      <!-- Architectural layers -->
+      <div class="layer grounded layer--walls" aria-hidden="true"></div>
+      <div class="layer grounded layer--columns-left" aria-hidden="true"></div>
+      <div class="layer grounded layer--columns-right" aria-hidden="true"></div>
+      <div class="layer grounded layer--banners" aria-hidden="true"></div>
+      <!-- Characters / statues -->
+      <div class="layer grounded layer--guards-left" aria-hidden="true"></div>
+      <div class="layer grounded layer--guards-right" aria-hidden="true"></div>
+      <!-- Throne and dais -->
+      <div class="layer grounded layer--dais" aria-hidden="true"></div>
+      <div class="layer grounded layer--throne" aria-hidden="true"></div>
+      <!-- Lighting -->
+      <div class="layer grounded layer--torches-left" aria-hidden="true"></div>
+      <div class="layer grounded layer--torches-right" aria-hidden="true"></div>
+      <div class="layer grounded layer--floor-glow" aria-hidden="true"></div>
+      <!-- Depth/backdrop image -->
+      <img class="layer layer--castle-final" data-depth="0.06" src="assets/img/castle-mid.svg" alt="" />
       <div class="layer layer--throne-glow" aria-hidden="true"></div>
+      <div class="layer layer--hall-veil" aria-hidden="true"></div>
       <div class="layer layer--final-atmosphere" aria-hidden="true"></div>
     </div>
     <div class="vignette" aria-hidden="true"></div>

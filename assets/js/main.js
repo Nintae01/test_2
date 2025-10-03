@@ -115,7 +115,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 // Year
 (function year(){ const y=document.getElementById('year'); if(y) y.textContent=String(new Date().getFullYear()); })();
 
-// Parallax scene (moon, castle, hills, fog) - REDUCED horizontal movement for better centering
+// Parallax scene with selective freezing for three-scene system
 (function parallax(){
   const layers = $$('.scene .layer');
   if (!layers.length) return;
@@ -127,23 +127,55 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
     sx = lerp(sx, (mx - cx)/cx, 0.03);
     sy = lerp(sy, (my - cy)/cy, 0.03);
     const sc = window.scrollY || document.documentElement.scrollTop || 0;
+    const body = document.body;
+    const isInside = body.classList.contains('is-inside');
+    const isFinale = body.classList.contains('is-finale');
+    
     layers.forEach(el => {
       const depth = parseFloat(el.getAttribute('data-depth')||'0.1');
       const grounded = el.classList.contains('grounded');
       const rising = el.classList.contains('rise');
+      
       // REDUCED horizontal parallax from 30 to 15 for better centering
       const x = Math.round(sx * 15 * depth);
-      // Keep grounded layers vertically anchored to the ground; only subtle mouse Y if desired
+      
+      // Check if this element should be frozen (castle, hills, causeway during inner scene)
+      const shouldFreeze = isInside && !isFinale && 
+        (el.classList.contains('layer--castle') || 
+         el.classList.contains('layer--hills') || 
+         el.classList.contains('layer--causeway') ||
+         el.classList.contains('ground-shadow'));
+      
       let y;
-      if (grounded) {
-        y = 0;
-      } else if (rising) {
-        // Start lower (positive offset) then rise to settle near base as page scrolls down
-        const start = parseFloat(el.getAttribute('data-rise') || '220'); // px
-        y = Math.round(start - sc * depth * 0.6 + sy * 15 * depth);
+      if (shouldFreeze) {
+        // Freeze at the current scroll position when entering inner scene
+        if (!el.dataset.frozenY) {
+          if (grounded) {
+            el.dataset.frozenY = '0';
+          } else if (rising) {
+            const start = parseFloat(el.getAttribute('data-rise') || '220');
+            el.dataset.frozenY = String(Math.round(start - sc * depth * 0.6));
+          } else {
+            el.dataset.frozenY = String(Math.round(sc * depth));
+          }
+        }
+        y = parseFloat(el.dataset.frozenY);
       } else {
-        y = Math.round(sc * depth + sy * 15 * depth);
+        // Clear frozen state when not in freeze mode
+        delete el.dataset.frozenY;
+        
+        if (grounded) {
+          // Grounded layers stay anchored to bottom (no vertical movement)
+          y = 0;
+        } else if (rising) {
+          // Start lower (positive offset) then rise to settle near base as page scrolls down
+          const start = parseFloat(el.getAttribute('data-rise') || '220'); // px
+          y = Math.round(start - sc * depth * 0.6 + sy * 15 * depth);
+        } else {
+          y = Math.round(sc * depth + sy * 15 * depth);
+        }
       }
+      
       el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
     requestAnimationFrame(frame);
@@ -186,10 +218,10 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
   els.forEach(el=> io.observe(el));
 })();
 
-// Scene switcher: when Skills (and beyond) is in view, fade to inside courtyard
+// Scene switcher: three-scene system
 (function sceneSwitch(){
   const body = document.body;
-  const sections = ['prologue','about','experience','cv','timeline','skills','contact']
+  const sections = ['prologue','about','experience','cv','timeline','skills','contact','signal']
     .map(id => document.getElementById(id))
     .filter(Boolean);
   if (!sections.length) return;
@@ -197,28 +229,33 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
     entries.forEach(en => {
       if (!en.isIntersecting) return;
       const id = en.target.id;
-      const inside = (id === 'skills' || id === 'contact');
+      // Castle Approach: prologue, about
+      // Courtyard Entry: experience, cv, timeline, skills
+      // Throne Room: contact
+      const inside = (id === 'experience' || id === 'cv' || id === 'timeline' || id === 'skills');
+      const finale = (id === 'contact' || id === 'signal');
       body.classList.toggle('is-inside', inside);
+      body.classList.toggle('is-finale', finale);
     });
-  }, { threshold: 0.55 });
+  }, { threshold: 0.35, rootMargin: '0px 0px -20% 0px' });
   sections.forEach(sec => io.observe(sec));
 })();
 
-// Scroll-driven zoom towards the courtyard gate while in the Skills chapter
+// Scroll-driven zoom towards the courtyard gate during Experience → Skills
 (function innerZoom(){
   const root = document.documentElement;
   const body = document.body;
-  const arsenal = document.getElementById('skills');
-  if (!arsenal) return;
+  const experience = document.getElementById('experience');
+  if (!experience) return;
   const maxZoom = 1.18; // target zoom factor at end of section
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
   function onScroll(){
     // Only zoom when inside scene is active
     if (!body.classList.contains('is-inside')) { root.style.setProperty('--inner-zoom', '1'); return; }
     const st = root.scrollTop || window.pageYOffset || 0;
-    const top = arsenal.offsetTop;
-    const h = arsenal.offsetHeight || 1;
-    const p = clamp((st - top) / h, 0, 1); // 0 at start of arsenal, 1 at end
+    const top = experience.offsetTop;
+    const h = experience.offsetHeight || 1;
+    const p = clamp((st - top) / h, 0, 1); // 0 at start of experience, 1 at end
     const z = 1 + (maxZoom - 1) * p;
     root.style.setProperty('--inner-zoom', z.toFixed(4));
   }
@@ -261,12 +298,22 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 })();
 
 
-/* gate-entry finale – scroll fallback */
-const finale=document.getElementById('signal');
-if(finale){
-  window.addEventListener('scroll',()=>{
-    const st=window.scrollY||document.documentElement.scrollTop;
-    const limit=finale.offsetTop;
-    document.body.classList.toggle('is-finale',st+window.innerHeight*.6>limit);
-  },{passive:true});
-}
+// Final throne room fireflies for golden atmosphere
+(function finalFireflies(){
+  const c = document.getElementById('fireflies-final'); if (!c) return; const ctx = c.getContext('2d');
+  let dpr=1, w=0, h=0, bugs=[];
+  function resize(){ dpr = window.devicePixelRatio||1; w = c.clientWidth; h = c.clientHeight; c.width = w*dpr; c.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); build(); }
+  function build(){ const count = Math.max(20, Math.round(Math.sqrt(w*h)/35)); bugs = new Array(count).fill(0).map(()=>({ x: Math.random()*w, y: Math.random()*h*0.7 + h*0.15, a: Math.random()*Math.PI*2, v: 0.2 + Math.random()*0.4, r: 1.4 + Math.random()*1.8, t: Math.random()*6 })); }
+  function step(){ ctx.clearRect(0,0,w,h); bugs.forEach(b=>{ b.a += (Math.random()-0.5)*0.15; b.x += Math.cos(b.a)*b.v; b.y += Math.sin(b.a)*b.v*0.4; b.t += 0.025; const glow = 0.5 + 0.5*(0.5+0.5*Math.sin(b.t)); ctx.shadowBlur = 10 + 20*glow; ctx.shadowColor = `rgba(230,208,156,${0.6+0.4*glow})`; ctx.fillStyle = `rgba(244,216,154,${0.7+0.3*glow})`; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); if (b.x<-10) b.x=w+10; if (b.x>w+10) b.x=-10; if (b.y< h*0.1) b.y=h*0.85; if (b.y>h*0.9) b.y=h*0.2; }); requestAnimationFrame(step); }
+  resize(); window.addEventListener('resize', resize); step();
+})();
+
+// Disabled: finale scroll fallback (IntersectionObserver handles finale state)
+// const finale=document.getElementById('signal');
+// if(finale){
+//   window.addEventListener('scroll',()=>{
+//     const st=window.scrollY||document.documentElement.scrollTop;
+//     const limit=finale.offsetTop;
+//     document.body.classList.toggle('is-finale',st+window.innerHeight*.6>limit);
+//   },{passive:true});
+// }

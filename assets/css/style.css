@@ -69,9 +69,20 @@ h1, h2, h3, .title, .chapter-title {
 #fireflies { opacity: 0.9; mix-blend-mode: screen; z-index: 5; }
 .layer { position: absolute; will-change: transform; }
 .layer--moon { top: 6vh; left: 8vw; width: 220px; opacity: 0.9; filter: drop-shadow(0 12px 24px rgba(243,224,180,0.28)); z-index: 0; }
-.scene--inner { opacity: 0; transition: opacity .8s ease; transform-origin: var(--inner-origin-x, 50%) var(--inner-origin-y, 68%); transform: translateX(var(--inner-shift, 0px)) scale(calc(var(--inner-zoom, 1) * var(--inner-zoom-extra, 1))); }
+
+/* Scene transitions */
+.scene--outer { opacity: 1; transition: opacity .8s ease; } /* Default: outer scene visible */
+.scene--inner { opacity: 0; transition: opacity .8s ease; transform-origin: var(--inner-origin-x, 50%) var(--inner-origin-y, 68%); transform: translateX(var(--inner-shift, 0px)) scale(calc(var(--inner-zoom, 1) * var(--inner-zoom-extra, 1))); pointer-events: none; }
+.scene--final { opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+
+/* Inside state: both outer and inner visible (for depth with trees) */
+.is-inside .scene--outer { opacity: 1; }
 .is-inside .scene--inner { opacity: 1; }
-.is-inside .scene--outer { opacity: 0; }
+
+/* Finale state: only final scene visible */
+.is-finale .scene--outer { opacity: 0; }
+.is-finale .scene--inner { opacity: 0; }
+.is-finale .scene--final { opacity: 1; }
 .layer--castle { bottom: 0; width: 160%; left: 50%; margin-left: -80%; opacity: 1; z-index: 3; filter: drop-shadow(0 22px 50px rgba(0,0,0,0.75)) brightness(1.20) contrast(1.18) saturate(1.15); image-rendering: -webkit-optimize-contrast; }
 .layer--hills { bottom: 0; width: 135%; left: 50%; margin-left: -67.5%; opacity: 0.95; z-index: 2; filter: brightness(1.08) contrast(1.05); }
 .layer--causeway { bottom: var(--causeway-bottom); width: 130%; left: 50%; margin-left: -65%; opacity: 1; z-index: 4; filter: drop-shadow(0 18px 40px rgba(0,0,0,0.70)) brightness(1.10) contrast(1.12); image-rendering: -webkit-optimize-contrast; }
@@ -345,6 +356,140 @@ h1, h2, h3, .title, .chapter-title {
 .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; filter: none !important; }
 .reveal.in { opacity: 1; transform: none; filter: none !important; }
 
+/* Final throne room scene layers */
+.layer--throne-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 30vh;
+  width: 60vw;
+  height: 50vh;
+  margin-left: -30vw;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(50% 60% at 50% 60%, rgba(230,208,156,0.35), rgba(230,208,156,0.0) 65%);
+  filter: blur(20px) saturate(1.2);
+  opacity: 0.8;
+}
+
+.layer--final-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(70% 60% at 50% 50%, rgba(244,216,154,0.12) 18%, rgba(10,14,20,0.45) 78%, rgba(10,14,20,0.8) 100%);
+}
+
+.layer--castle-final {
+  bottom: 0;
+  left: 50%;
+  width: 140%;
+  margin-left: -70%;
+  z-index: 1;
+  opacity: 0.95;
+  filter: brightness(1.12) contrast(1.06) saturate(1.10);
+}
+
+.layer--throne-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* subtle luminous parchment + gold vertical gradient */
+  background:
+    radial-gradient(120% 80% at 50% 30%, rgba(244,216,154,0.20), rgba(244,216,154,0) 60%),
+    linear-gradient(180deg, rgba(244,216,154,0.08), rgba(244,216,154,0.02) 40%, rgba(10,14,20,0.0) 100%);
+  filter: saturate(1.12) brightness(1.1);
+}
+
+/* Throne room constructed layers */
+.layer--walls {
+  position: absolute; left: 50%; bottom: 0; width: 180%; margin-left: -90%; height: 100%; z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(18,22,30,0.45), rgba(12,16,24,0.78)),
+    radial-gradient(40% 30% at 50% 85%, rgba(244,216,154,0.14), transparent 74%),
+    repeating-linear-gradient(90deg, rgba(230,200,120,0.06) 0 2px, rgba(255,255,255,0.0) 2px 22px),
+    repeating-linear-gradient(0deg, rgba(230,200,120,0.025) 0 1px, rgba(255,255,255,0.0) 1px 14px);
+  filter: brightness(1.12) contrast(1.04) saturate(1.06);
+}
+.layer--columns-left, .layer--columns-right {
+  position: absolute; bottom: 0; width: 36%; height: 100%; z-index: 2; pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(230,200,120,0.12) 0 2px, rgba(255,255,255,0.02) 2px 22px);
+  filter: brightness(1.08) contrast(1.06) saturate(1.06);
+  mask-image: linear-gradient(180deg, black, transparent 90%);
+  -webkit-mask-image: linear-gradient(180deg, black, transparent 90%);
+}
+.layer--columns-left::before, .layer--columns-right::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(244,216,154,0.22), rgba(244,216,154,0.06) 18%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 60%, rgba(244,216,154,0.06) 82%, rgba(244,216,154,0.22));
+  pointer-events: none;
+}
+.layer--columns-left { left: -2%; transform: skewX(-2deg); }
+.layer--columns-right { right: -2%; transform: scaleX(-1) skewX(-2deg); }
+.layer--banners {
+  position: absolute; left: 50%; top: 8vh; width: 120%; margin-left: -60%; height: 34vh; z-index: 3; pointer-events: none;
+  background:
+    radial-gradient(60% 120% at 25% 0%, rgba(230,200,120,0.18), rgba(230,200,120,0) 60%),
+    radial-gradient(60% 120% at 75% 0%, rgba(230,200,120,0.18), rgba(230,200,120,0) 60%),
+    repeating-linear-gradient(90deg, rgba(230,200,120,0.04) 0 8px, rgba(0,0,0,0) 8px 48px);
+  filter: saturate(1.12);
+}
+.layer--guards-left, .layer--guards-right {
+  position: absolute; bottom: 0; width: 28%; height: 60%; z-index: 4; pointer-events: none;
+  background: radial-gradient(40% 70% at 50% 80%, rgba(12,16,24,0.78), rgba(12,16,24,0));
+  filter: brightness(1.08);
+}
+.layer--guards-left { left: 6%; }
+.layer--guards-right { right: 6%; }
+.layer--dais {
+  position: absolute; left: 50%; bottom: 12vh; width: 60%; margin-left: -30%; height: 10vh; z-index: 5; pointer-events: none;
+  background: radial-gradient(60% 80% at 50% 30%, rgba(230,200,120,0.28), rgba(230,200,120,0));
+  filter: blur(7px) saturate(1.12);
+}
+.layer--throne {
+  position: absolute; left: 50%; bottom: 16vh; width: 26%; margin-left: -13%; height: 28vh; z-index: 6; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(40,32,18,0.85), rgba(20,16,10,0.92)),
+    radial-gradient(60% 40% at 50% 30%, rgba(244,216,154,0.12), transparent 60%);
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6), 0 0 60px rgba(230,200,120,0.22) inset, 0 0 18px rgba(244,216,154,0.18);
+  border: 1px solid rgba(230,200,120,0.18);
+}
+.layer--throne::before {
+  content: ""; position: absolute; left: 50%; top: -6vh; width: 18vh; height: 18vh; margin-left: -9vh; border-radius: 50%;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(244,216,154,0.20), rgba(244,216,154,0));
+  filter: blur(2px);
+}
+.layer--torches-left, .layer--torches-right {
+  position: absolute; bottom: 22vh; width: 12%; height: 24vh; z-index: 7; pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 50% 50%, rgba(255,184,108,0.35), rgba(255,184,108,0) 70%);
+  filter: blur(6px) saturate(1.2);
+  animation: torch-flicker 2.6s ease-in-out infinite;
+}
+.layer--torches-left::after, .layer--torches-right::after {
+  content: ""; position: absolute; left: 50%; bottom: 18%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(255,214,140,0.9), rgba(255,214,140,0.2));
+  box-shadow: 0 0 24px rgba(255,184,108,0.6), 0 0 60px rgba(244,216,154,0.35);
+}
+.layer--torches-left { left: 18%; }
+.layer--torches-right { right: 18%; }
+.layer--floor-glow {
+  position: absolute; left: 50%; bottom: 0; width: 160%; margin-left: -80%; height: 36vh; z-index: 1; pointer-events: none;
+  background: radial-gradient(60% 60% at 50% 0%, rgba(244,216,154,0.2), rgba(244,216,154,0) 72%);
+  filter: blur(12px) saturate(1.1);
+}
+@keyframes torch-flicker { 0%,100%{opacity:.85} 40%{opacity:.65} 60%{opacity:.95} }
+
+#fireflies-final {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.95;
+  mix-blend-mode: screen;
+}
+
 /* Section-specific tuning */
 body.is-inside {
   /* tuned for inner courtyard alignment */
@@ -355,6 +500,7 @@ body.is-inside {
   --gate-aura-bottom: 20vh;
   --gate-aura-width: 40vw;
   --gate-aura-height: 40vh;
+  --final-zoom: 1.0;
 }
 body.is-finale {
   --inner-zoom-extra: 1.10; /* subtle extra push inward */
@@ -363,6 +509,7 @@ body.is-finale {
   --gate-aura-height: 44vh;
   --gate-aura-bottom: 22vh;
   --gate-aura-shift: 14px;
+  --final-zoom: 1.05;
 }
 
 /* Contact form styling */
@@ -421,13 +568,5 @@ body.is-finale {
 }
 
 
-/* =====  gate-entry finale  ===== */
-body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transition:opacity 1.2s ease}
-body::before{background:url("/static/img/gate-interior.svg") no-repeat center/cover;opacity:0}
-body.is-finale::before{opacity:1}
-body.is-finale::after{background:radial-gradient(60% 60% at 50% 50%,transparent 40%,#0b0f16 100%);opacity:.6}
-.letter-box{transform:translateY(0) scale(1);transition:transform .8s ease,box-shadow .8s ease}
-body.is-finale .letter-box{transform:translateY(-8px) scale(1.02);box-shadow:0 0 40px rgba(230,208,156,.35),0 20px 80px rgba(0,0,0,.5)}
-.letter-box::after{content:"";position:absolute;bottom:-36px;left:50%;width:40px;height:40px;margin-left:-20px;background:url("/static/img/letter-glow.svg") no-repeat center/contain;opacity:0;animation:levitate 3s ease-in-out infinite;transition:opacity .6s}
-body.is-finale .letter-box::after{opacity:.9}
-@keyframes levitate{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* =====  finale overlay disabled (avoids black fade if assets missing) ===== */
+/* The throne room visuals are handled by .scene--final layers now */
